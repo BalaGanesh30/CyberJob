@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Create an Axios instance
 const API = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "https://cyberjob-server.onrender.com/api",
 });
 
 // Attach token to all outgoing requests
