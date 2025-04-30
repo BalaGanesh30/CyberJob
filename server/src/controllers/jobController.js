@@ -40,7 +40,9 @@ export const createJob = async (req, res) => {
 // @access  Public
 export const getAllJobs = async (req, res) => {
   try {
-    const jobs = await Job.find().sort({ createdAt: -1 });
+    const jobs = await Job.find({ status: "Published" }).sort({
+      createdAt: -1,
+    });
     res.status(200).json({ success: true, jobs });
   } catch (error) {
     console.error("Get Jobs Error:", error.message);
