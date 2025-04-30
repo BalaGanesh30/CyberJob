@@ -11,7 +11,7 @@ const port = process.env.PORT || 8000;
 await connectDB();
 
 //Allow Multiple Origins
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = ["http://localhost:5173","https://cyberjob-bg.onrender.com"];
 
 //Middleware configuration
 app.use(express.json());
