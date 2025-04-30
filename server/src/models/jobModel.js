@@ -10,7 +10,7 @@ const jobSchema = new mongoose.Schema(
     salaryMax: { type: Number, required: true },
     deadline: { type: Date, required: true },
     description: { type: Array, required: true }, // ✅ description as array of lines
-    status: { type: String, default: "Draft" },
+    status: { type: String,  required: true},
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
