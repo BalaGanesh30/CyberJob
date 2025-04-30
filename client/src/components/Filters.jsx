@@ -24,13 +24,11 @@ export default function Filters() {
 
   // Salary slider dragging
   useEffect(() => {
-    // Inside your Filters component, replace the handleMouseMove function in the useEffect with this:
-
-    const handleMouseMove = (e) => {
+    const handlePointerMove = (clientX) => {
       if (!activeThumb || !sliderRef.current) return;
 
       const rect = sliderRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
+      const x = clientX - rect.left;
       const percentage = Math.min(Math.max(x / rect.width, 0), 1);
 
       // Calculate value and round to nearest 5000
@@ -45,14 +43,22 @@ export default function Filters() {
         setSalaryRange([salaryRange[0], newMax]);
       }
     };
-    const handleMouseUp = () => setActiveThumb(null);
+
+    const handleMouseMove = (e) => handlePointerMove(e.clientX);
+    const handleTouchMove = (e) => handlePointerMove(e.touches[0].clientX);
+
+    const handleEnd = () => setActiveThumb(null);
 
     document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("mouseup", handleEnd);
+    document.addEventListener("touchmove", handleTouchMove);
+    document.addEventListener("touchend", handleEnd);
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("mouseup", handleEnd);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleEnd);
     };
   }, [activeThumb, salaryRange]);
 
@@ -137,12 +143,14 @@ export default function Filters() {
             className="absolute top-1/2 w-4 h-4 bg-black rounded-full -translate-x-1/2 -translate-y-1/2 cursor-pointer"
             style={{ left: `${minPosition}%` }}
             onMouseDown={() => setActiveThumb("min")}
+            onTouchStart={() => setActiveThumb("min")}
           ></div>
 
           <div
             className="absolute top-1/2 w-4 h-4 bg-black rounded-full -translate-x-1/2 -translate-y-1/2 cursor-pointer"
             style={{ left: `${maxPosition}%` }}
             onMouseDown={() => setActiveThumb("max")}
+            onTouchStart={() => setActiveThumb("max")}
           ></div>
         </div>
       </div>
