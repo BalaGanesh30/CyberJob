@@ -22,13 +22,24 @@ const JobsList = () => {
 
   // Helper function to calculate time ago
   const getTimeAgo = (dateString) => {
-    const date = new Date(dateString);
+    const postedDate = new Date(dateString);
     const now = new Date();
-    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
+    const diffInMs = now - postedDate;
 
-    if (diffInHours < 24) return `${diffInHours}h Ago`;
+    const diffInSeconds = Math.floor(diffInMs / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
     const diffInDays = Math.floor(diffInHours / 24);
-    return `${diffInDays}d Ago`;
+
+    if (diffInDays > 0) {
+      return `${diffInDays}d Ago`;
+    } else if (diffInHours > 0) {
+      return `${diffInHours}h Ago`;
+    } else if (diffInMinutes > 0) {
+      return `${diffInMinutes}m Ago`;
+    } else {
+      return `Just now`;
+    }
   };
 
   // Fetch jobs
@@ -39,10 +50,10 @@ const JobsList = () => {
         const res = await API.get("/job");
         const jobsWithExtras = res.data.jobs.map((job) => ({
           ...job,
-          salary: `${(job.salaryMax / 100000).toFixed()} LPA`, // More precise salary display
-          experience: "1-3 yrs", // Default experience
-          companyLogo: companyLogos[job.companyName] || assets.testla, // Fallback to testla logo
-          postedTime: getTimeAgo(job.createdAt), // Dynamic time calculation
+          salary: `${(job.salaryMax / 100000).toFixed()} LPA`,
+          experience: "1-3 yrs",
+          companyLogo: companyLogos[job.companyName] || assets.testla,
+          postedTime: getTimeAgo(job.createdAt), // 👈 Here
         }));
         setAllJobs(jobsWithExtras);
         setJobs(jobsWithExtras);
