@@ -13,6 +13,7 @@ const jobSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ["Draft", "Published"],
+      default: "Published",
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
