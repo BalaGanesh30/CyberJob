@@ -9,12 +9,17 @@ const JobCard = ({
   location,
   salary,
   postedTime,
-  description,
+  description = [],
 }) => {
+  // Show only first 3 lines; show "…extra description" if more
+  const maxVisibleLines = 3;
+  const visibleDescription = description.slice(0, maxVisibleLines);
+  const hasMore = description.length > maxVisibleLines;
+
   return (
-    <div className="w-[270px] bg-white rounded-2xl shadow-md p-4 flex flex-col gap-3 font-sans">
+    <div className="w-[270px] h-[320px] bg-white rounded-2xl shadow-md p-4 flex flex-col font-sans">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-2">
         <img
           src={companyLogo}
           alt="Company Logo"
@@ -26,10 +31,12 @@ const JobCard = ({
       </div>
 
       {/* Title */}
-      <h2 className="text-lg font-semibold text-gray-800 m-0">{jobTitle}</h2>
+      <h2 className="text-lg font-semibold text-gray-800 mb-1 truncate">
+        {jobTitle}
+      </h2>
 
       {/* Details */}
-      <div className="flex flex-wrap gap-2 text-sm text-gray-500">
+      <div className="flex flex-wrap gap-2 text-sm text-gray-500 mb-2">
         <span className="flex items-center gap-1">
           <LuUserPlus /> {experience} Exp
         </span>
@@ -41,17 +48,22 @@ const JobCard = ({
         </span>
       </div>
 
-      {/* Description */}
-      <ul className="list-disc pl-5 text-[13px] text-gray-600 m-0 max-h-24 overflow-hidden">
-        {description.map((line, index) => (
+      {/* Description (trimmed with extra hint) */}
+      <ul className="list-disc pl-5 text-[13px] text-gray-600 flex-1 overflow-hidden">
+        {visibleDescription.map((line, index) => (
           <li key={index}>{line}</li>
         ))}
+        {hasMore && (
+          <li className="italic text-gray-400">...extra description</li>
+        )}
       </ul>
 
-      {/* Button */}
-      <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm py-2 rounded-lg transition mt-2 cursor-pointer">
-        Apply Now
-      </button>
+      {/* Button pinned to bottom */}
+      <div className="pt-3">
+        <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm py-2 rounded-lg transition">
+          Apply Now
+        </button>
+      </div>
     </div>
   );
 };
